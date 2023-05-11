@@ -1,8 +1,10 @@
-package com.heka.isimsozlukapp;
+package com.heka.isimsozlukapp.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.heka.isimsozlukapp.R;
 
 public class MainActivity extends AppCompatActivity {
 
