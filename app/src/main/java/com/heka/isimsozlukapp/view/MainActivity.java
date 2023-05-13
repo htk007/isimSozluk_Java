@@ -20,10 +20,16 @@ import com.heka.isimsozlukapp.util.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.internal.schedulers.RxThreadFactory;
+import io.reactivex.rxjava3.plugins.RxJavaPlugins;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     String name ="Hasan";
     Button buttonSearch;
     EditText editTextName;
+    CompositeDisposable compositeDisposable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                 .build();
 
         initView();
@@ -76,28 +84,28 @@ public class MainActivity extends AppCompatActivity {
     private void setLookupName(String nameValue){
         NameAPI nameAPI = retrofit.create(NameAPI.class);
 
-        Call<List<Name>> call = nameAPI.lookupName(nameValue, SecretStorage.API_KEY);
+        compositeDisposable = new CompositeDisposable();
 
-        call.enqueue(new Callback<List<Name>>() {
-            @Override
-            public void onResponse(Call<List<Name>> call, Response<List<Name>> response) {
-                if(response.isSuccessful()){
-                   List<Name> nameList=  response.body();
-                    nameArrayList = new ArrayList<>(nameList);
+        compositeDisposable.add(nameAPI.lookupName(nameValue,SecretStorage.API_KEY)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::handleResponse));
+    }
 
-                    for(Name name :nameArrayList){
-                        Log.i("HKLOG", "gender: "+ name.getGender()+ " "+name.getUsages().size());
-                        for(Usage nameUsage: name.getUsages()){
-                            Log.i("HKLOG","usage: " +nameUsage.getUsageFull().toString());
-                        }
-                    }
-                }
+    private void handleResponse(List<Name> nameList){
+        nameArrayList = new ArrayList<>(nameList);
+
+        for(Name name :nameArrayList){
+            Log.i("HKLOG", "gender: "+ name.getGender()+ " "+name.getUsages().size());
+            for(Usage nameUsage: name.getUsages()){
+                Log.i("HKLOG","usage: " +nameUsage.getUsageFull().toString());
             }
+        }
+    }
 
-            @Override
-            public void onFailure(Call<List<Name>> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.clear();
     }
 }
