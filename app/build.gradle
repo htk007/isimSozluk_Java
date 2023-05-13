@@ -39,4 +39,16 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.google.code.gson:gson:2.8.9'
+
+    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.4.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata:2.4.0'
+
+    def lifecycle_version = "2.4.0"
+
+    // ViewModel ve LiveData
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
+
+    // lifecycle extension
+    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
 }
