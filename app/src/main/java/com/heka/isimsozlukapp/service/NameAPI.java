@@ -16,5 +16,4 @@ import retrofit2.http.Query;
 public interface NameAPI {
     @GET(LOOKUP_JSON_NAME)
     Observable<List<Name>> lookupName(@Query(QUERY_KEY_NAME) String name, @Query(QUERY_KEY_KEY) String key);
-    //Call<List<Name>> lookupName(@Query(QUERY_KEY_NAME) String name, @Query(QUERY_KEY_KEY) String key);
 }
