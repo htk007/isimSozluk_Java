@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.heka.isimsozlukapp.ApiClient;
 import com.heka.isimsozlukapp.model.Name;
+import com.heka.isimsozlukapp.model.Usage;
 import com.heka.isimsozlukapp.repository.NameRepository;
 import com.heka.isimsozlukapp.service.NameAPI;
 
@@ -33,6 +34,7 @@ public class NameViewModel extends ViewModel {
     }
 
     public void searchNames(String query, String apiKey) {
+        Log.i("HKLOG","Query is: "+query);
         nameRepository.searchNames(query, apiKey)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -43,6 +45,12 @@ public class NameViewModel extends ViewModel {
 
                     @Override
                     public void onNext(List<Name> names) {
+                        for(Name name: names){
+                            Log.i("HKLOG","usages size:" +name.getUsages().size());
+                            for(Usage usage: name.getUsages()){
+                                Log.i("HKLOG","USAGE IS: "+usage.getUsageFull());
+                            }
+                        }
                         nameList.setValue(names);
                     }
 

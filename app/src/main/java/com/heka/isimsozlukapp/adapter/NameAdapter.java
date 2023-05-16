@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.heka.isimsozlukapp.R;
 import com.heka.isimsozlukapp.model.Name;
+import com.heka.isimsozlukapp.model.Usage;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class NameAdapter extends RecyclerView.Adapter<NameAdapter.NameViewHolder
 
     private Context context;
     private List<Name> nameList;
+
 
     public NameAdapter(Context context, List<Name> nameList) {
         this.context = context;
