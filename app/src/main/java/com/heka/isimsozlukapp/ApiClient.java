@@ -14,7 +14,6 @@ import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
-    private static ApiClient instance;
     private static Retrofit retrofit = null;
 
     public static Retrofit getRetrofitClient() {
