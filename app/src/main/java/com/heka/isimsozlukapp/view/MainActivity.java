@@ -7,36 +7,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.heka.isimsozlukapp.R;
 import com.heka.isimsozlukapp.adapter.NameAdapter;
+import com.heka.isimsozlukapp.adapter.UsageAdapter;
 import com.heka.isimsozlukapp.model.Name;
 import com.heka.isimsozlukapp.model.SecretStorage;
-import com.heka.isimsozlukapp.model.Usage;
-import com.heka.isimsozlukapp.service.NameAPI;
-import com.heka.isimsozlukapp.util.Constants;
 import com.heka.isimsozlukapp.viewmodel.NameViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.internal.schedulers.RxThreadFactory;
-import io.reactivex.rxjava3.plugins.RxJavaPlugins;
-import io.reactivex.rxjava3.schedulers.Schedulers;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
     private EditText searchEditText;
@@ -45,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     private NameViewModel nameViewModel;
     private NameAdapter nameAdapter;
+    private UsageAdapter usageAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +44,10 @@ public class MainActivity extends AppCompatActivity {
         nameRecyclerView = findViewById(R.id.nameRecyclerView);
 
         nameAdapter = new NameAdapter(this, new ArrayList<>());
+        usageAdapter =  new UsageAdapter(this, new ArrayList<>());
         nameRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        nameRecyclerView.setAdapter(nameAdapter);
-
+        //nameRecyclerView.setAdapter(nameAdapter);
+        nameRecyclerView.setAdapter(usageAdapter);
         nameViewModel = new ViewModelProvider(this).get(NameViewModel.class);
 
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +63,9 @@ public class MainActivity extends AppCompatActivity {
         nameViewModel.getNameList().observe(this, new Observer<List<Name>>() {
             @Override
             public void onChanged(List<Name> nameList) {
+
                 nameAdapter.setNameList(nameList);
+                usageAdapter.setUsageList(nameList.get(0).getUsages());
             }
         });
     }

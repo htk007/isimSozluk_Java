@@ -12,7 +12,9 @@ import com.heka.isimsozlukapp.model.Name;
 import com.heka.isimsozlukapp.model.Usage;
 import com.heka.isimsozlukapp.repository.NameRepository;
 import com.heka.isimsozlukapp.service.NameAPI;
+import com.heka.isimsozlukapp.util.UsageComparator;
 
+import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -23,9 +25,11 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class NameViewModel extends ViewModel {
     private NameRepository nameRepository;
     private MutableLiveData<List<Name>> nameList;
+    private MutableLiveData<List<Usage>> usageList;
 
     public NameViewModel() {
         nameList = new MutableLiveData<>();
+        usageList = new MutableLiveData<>();
         nameRepository = new NameRepository(ApiClient.getRetrofitClient().create(NameAPI.class));
     }
 
@@ -45,11 +49,20 @@ public class NameViewModel extends ViewModel {
 
                     @Override
                     public void onNext(List<Name> names) {
+
                         for(Name name: names){
                             Log.i("HKLOG","usages size:" +name.getUsages().size());
+                            if(name.getUsages().size() > 1 ){
+                                UsageComparator comparator = new UsageComparator();
+                                List usageTemp = name.getUsages();
+                                Collections.sort(usageTemp, comparator);
+                                usageList.setValue(usageTemp);
+                            }
+
                             for(Usage usage: name.getUsages()){
                                 Log.i("HKLOG","USAGE IS: "+usage.getUsageFull());
                             }
+
                         }
                         nameList.setValue(names);
                     }
