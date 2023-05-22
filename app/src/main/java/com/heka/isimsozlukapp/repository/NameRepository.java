@@ -18,4 +18,6 @@ public class NameRepository {
     public Observable<List<Name>> searchNames(String query, String apiKey) {
         return nameAPI.lookupName(query, apiKey);
     }
+
+
 }
