@@ -15,6 +15,7 @@ import com.heka.isimsozlukapp.adapter.NameAdapter;
 import com.heka.isimsozlukapp.adapter.UsageAdapter;
 import com.heka.isimsozlukapp.model.Name;
 import com.heka.isimsozlukapp.model.SecretStorage;
+import com.heka.isimsozlukapp.util.PreferencesUtil;
 import com.heka.isimsozlukapp.viewmodel.NameViewModel;
 
 import java.util.ArrayList;
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String query = searchEditText.getText().toString().trim();
                 if (!query.isEmpty()) {
+                    PreferencesUtil.saveString(getApplicationContext(),query);
                     nameViewModel.searchNames(query, SecretStorage.API_KEY);
                 }
             }

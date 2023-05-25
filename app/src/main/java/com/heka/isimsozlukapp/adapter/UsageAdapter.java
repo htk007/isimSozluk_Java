@@ -1,6 +1,7 @@
 package com.heka.isimsozlukapp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.heka.isimsozlukapp.R;
 import com.heka.isimsozlukapp.model.Name;
 import com.heka.isimsozlukapp.model.Usage;
+import com.heka.isimsozlukapp.view.DetayActivity;
 
 import java.util.List;
 
@@ -63,6 +65,10 @@ protected static List<Usage> usageList;
                         Usage clickedItem = usageList.get(position);
                         String message = "Tıklanan öğe: " + clickedItem.getUsageFull();
                         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+
+                        Intent intent = new Intent(context, DetayActivity.class);
+                        intent.putExtra("usage", clickedItem.getUsageFull());
+                        context.startActivity(intent);
                     }
                 }
             });
