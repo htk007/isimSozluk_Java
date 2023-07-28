@@ -1,12 +1,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="16dp"
+    android:layout_marginTop="12dp"
+    android:background="@drawable/rounded_rc_item_blue"
+    >
 
     <TextView
         android:id="@+id/nameTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp" />
+        android:layout_weight="0.2"
+        android:textSize="18sp"
+        tools:text="Bu bir isim listesi ülke elemanıdır."
+        />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.8"
+        android:alpha="0.5"
+        android:src="@drawable/arrow_right"/>
 
 </LinearLayout>
